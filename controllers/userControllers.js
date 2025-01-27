@@ -52,7 +52,7 @@ const loginUser = asyncHandler(async (req, res) => {
     }
     //generate token
     const token = jwt.sign({ id: user._id }, process.env.PRIVATE_KEY, {
-        expiresIn: "10m",
+        expiresIn: "1d",
     });
     res.status(200).json({ token });
 });
