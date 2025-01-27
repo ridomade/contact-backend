@@ -5,6 +5,7 @@ const Contact = require("../models/contactModel");
 //@access Private
 const getAllContacts = asyncHandler(async (req, res) => {
     const contacts = await Contact.find({ user_id: req.user.id });
+    // status success
     res.status(200).json(contacts);
 });
 
@@ -14,8 +15,13 @@ const getAllContacts = asyncHandler(async (req, res) => {
 const getContactbyId = asyncHandler(async (req, res) => {
     const contact = await Contact.findById(req.params.id);
     if (!contact) {
-        res.status(404);
+        res.status(404); // not found
         throw new Error("Contact not found");
+    }
+
+    if (contact.user_id.toString() !== req.user.id) {
+        res.status(403); // Forbidden
+        throw new Error("You do not have permission to access this contact");
     }
     res.status(200).json(contact);
 });
@@ -49,14 +55,23 @@ const updateContactbyId = asyncHandler(async (req, res) => {
         throw new Error("Please provide at least one field to update");
     }
 
-    // Cari dan perbarui kontak berdasarkan ID
+    const contact = await Contact.findById(req.params.id);
+
+    if (contact.user_id.toString() !== req.user.id) {
+        res.status(403);
+        throw new Error("You do not have permission to update this contact");
+    }
+
+    if (!contact) {
+        res.status(404);
+        throw new Error("Contact not found");
+    }
     const updatedContact = await Contact.findByIdAndUpdate(
         req.params.id,
         { name, email, phone }, // Data baru untuk diperbarui
         { new: true, runValidators: true } // Opsi untuk mengembalikan data yang diperbarui
     );
 
-    // Jika kontak tidak ditemukan, kembalikan error
     if (!updatedContact) {
         res.status(404);
         throw new Error("Contact not found");
@@ -72,12 +87,19 @@ const updateContactbyId = asyncHandler(async (req, res) => {
 //@route DELETE /api/contacts/:id
 //@access Private
 const deleteContactbyId = asyncHandler(async (req, res) => {
-    const contact = await Contact.findByIdAndDelete(req.params.id);
+    const contact = await Contact.findById(req.params.id);
+
     if (!contact) {
         res.status(404);
         throw new Error("Contact not found");
     }
-    res.status(200).json({ message: "Succsessfully deleate the contact", data: contact });
+
+    if (contact.user_id.toString() !== req.user.id) {
+        res.status(403);
+        throw new Error("You do not have permission to delete this contact");
+    }
+    const deleteContact = await Contact.findByIdAndDelete(req.params.id);
+    res.status(200).json({ message: "Succsessfully deleate the contact", data: deleteContact });
 });
 
 module.exports = {
