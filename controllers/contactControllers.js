@@ -60,7 +60,7 @@ const updateContactbyId = asyncHandler(async (req, res) => {
     // check if at least one field is provided
     if (!name && !email && !phone) {
         res.status(400);
-        throw new Error("Please provide at least one field to update");
+        throw new Error("Please provide at least one field to update (name, email,phone)");
     }
 
     // check if the contact exists
