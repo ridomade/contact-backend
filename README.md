@@ -1,4 +1,4 @@
-Contact Management API
+##Contact Management API
 This is a Node.js Express-based REST API for managing contacts. The API allows users to create, read, update, and delete (CRUD) contacts while implementing user authentication.
 
 Features
