@@ -17,7 +17,7 @@ npm (Node Package Manager)
 Installation
 Clone this repository:
 sh
-git clone https://github.com/yourusername/contact-management.git
+git clone https://github.com/ridomade/contact-management.git
 
 Navigate into the project directory:
 cd contact-management
