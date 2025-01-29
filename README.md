@@ -23,7 +23,7 @@ Ensure you have the following installed:
 1. Clone this repository:
 
     ```sh
-    git clone https://github.com/yourusername/contact-management.git
+    git clone https://github.com/ridomade/contact-backend.git
     ```
 
 2. Navigate into the project directory:
@@ -91,10 +91,4 @@ ContactManagement/
 │-- .env            # Environment variables (not committed to Git)
 ```
 
-## License
-
-This project is licensed under the MIT License.
-
----
-
-Made with ❤️ by Your Name
+Made with ❤️ by Made Rido Paramartha
