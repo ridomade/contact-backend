@@ -5,7 +5,7 @@ const Contact = require("../models/contactModel");
 //@access Private
 const getAllContacts = asyncHandler(async (req, res) => {
     const contacts = await Contact.find({ user_id: req.user.id });
-    // status success
+    // status success (OK)
     res.status(200).json(contacts);
 });
 
@@ -30,52 +30,58 @@ const getContactbyId = asyncHandler(async (req, res) => {
 //@route POST /api/contacts/
 //@access Private
 const CreateContact = asyncHandler(async (req, res) => {
-    const { name, email, phone } = req.body;
+    const { name, email, phone } = req.body; // get the data from the request body
 
-    if (!name || !email || !phone) {
-        res.status(400);
-        throw new Error("Please fill all the fields");
+    // Array to store missing fields
+    const missingFields = [];
+    if (!name) missingFields.push("name");
+    if (!email) missingFields.push("email");
+    if (!phone) missingFields.push("phone");
+
+    if (missingFields.length > 0) {
+        res.status(400); // bad request
+        throw new Error(`Please fill all the fields: ${missingFields.join(", ")}`);
     }
 
+    // Create a new contact
     const contact = await Contact.create({
         name,
         email,
         phone,
         user_id: req.user.id,
     });
+    // status created (success), send the response
     res.status(201).json({ message: "sucssesfully created new contact", data: contact });
 });
 
 const updateContactbyId = asyncHandler(async (req, res) => {
     const { name, email, phone } = req.body;
 
-    // Periksa apakah data untuk pembaruan disediakan
+    // check if at least one field is provided
     if (!name && !email && !phone) {
         res.status(400);
         throw new Error("Please provide at least one field to update");
     }
 
+    // check if the contact exists
     const contact = await Contact.findById(req.params.id);
+    if (!contact) {
+        res.status(404); // not found
+        throw new Error("Contact not found");
+    }
 
+    // check if the user is the owner of the contact
     if (contact.user_id.toString() !== req.user.id) {
-        res.status(403);
+        res.status(403); // Forbidden
         throw new Error("You do not have permission to update this contact");
     }
 
-    if (!contact) {
-        res.status(404);
-        throw new Error("Contact not found");
-    }
+    // Update the contact
     const updatedContact = await Contact.findByIdAndUpdate(
         req.params.id,
-        { name, email, phone }, // Data baru untuk diperbarui
-        { new: true, runValidators: true } // Opsi untuk mengembalikan data yang diperbarui
+        { name, email, phone },
+        { new: true }
     );
-
-    if (!updatedContact) {
-        res.status(404);
-        throw new Error("Contact not found");
-    }
 
     res.status(200).json({
         message: "Successfully updated the contact",

@@ -10,10 +10,10 @@ const {
     updateContactbyId,
 } = require("../controllers/contactControllers");
 
-// Middleware tokenHandler diterapkan untuk semua rute di bawah
+// middleware for handling token, all routes in this file will use this middleware
 router.use(tokenHandler);
 
-// Rute API untuk kontak
+// routes for contact api
 router.route("/").get(getAllContacts).post(CreateContact);
 
 router.route("/:id").get(getContactbyId).put(updateContactbyId).delete(deleteContactbyId);
