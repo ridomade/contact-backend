@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const User = require("../models/userModel");
+const Contact = require("../models/contactModel");
 
 // @desc Register a new user
 // @route POST /api/users/register
@@ -81,5 +82,29 @@ const getUserProfile = asyncHandler(async (req, res) => {
     res.status(200).json({ data: userData });
 });
 
+// @desc Delete user by id and its contacts
+// @route DELETE /api/users/:id
+// @access Private
+const deteletUserbyId = asyncHandler(async (req, res) => {
+    const userId = await User.findById(req.params.id);
+
+    if (req.params.id != req.user.id) {
+        res.status(403); // Forbidden
+        throw new Error("You do not have permission to delete this user");
+    }
+
+    if (!userId) {
+        res.status(404); // not found
+        throw new Error("User not found");
+    }
+    console.log(userId);
+    console.log(req.params.id);
+    console.log(req.user.id);
+    await Contact.deleteMany({ user_id: userId });
+
+    await User.findByIdAndDelete(req.params.id);
+
+    res.status(200).json({ message: "User and its contacts deleted", data: userId });
+});
 // Export the functions
-module.exports = { registerUser, loginUser, getUserProfile };
+module.exports = { registerUser, loginUser, getUserProfile, deteletUserbyId };

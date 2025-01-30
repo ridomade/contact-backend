@@ -61,21 +61,22 @@ Ensure you have the following installed:
 
 ### User Authentication (`/api/users`)
 
-| Method | Endpoint    | Description                   |
-| ------ | ----------- | ----------------------------- |
-| `POST` | `/register` | Register a new user           |
-| `POST` | `/login`    | Authenticate user & get token |
-| `GET`  | `/profile`  | Get user profile (Protected)  |
+| Method   | Endpoint    | Description                               |
+| -------- | ----------- | ----------------------------------------- |
+| `POST`   | `/register` | Register a new user                       |
+| `POST`   | `/login`    | Authenticate user & get token             |
+| `GET`    | `/profile`  | Get user profile (Protected)              |
+| `DELETE` | `/:id`      | Delete a user and its contact (Protected) |
 
 ### Contact Management (`/api/contact`)
 
-| Method   | Endpoint | Description                |
-| -------- | -------- | -------------------------- |
-| `GET`    | `/`      | Get all contacts           |
-| `POST`   | `/`      | Create a new contact       |
-| `GET`    | `/:id`   | Get a single contact by ID |
-| `PUT`    | `/:id`   | Update an existing contact |
-| `DELETE` | `/:id`   | Delete a contact           |
+| Method   | Endpoint | Description                            |
+| -------- | -------- | -------------------------------------- |
+| `GET`    | `/`      | Get all contacts (Protected)           |
+| `POST`   | `/`      | Create a new contact (Protected)       |
+| `GET`    | `/:id`   | Get a single contact by ID (Protected) |
+| `PUT`    | `/:id`   | Update an existing contact (Protected) |
+| `DELETE` | `/:id`   | Delete a contact (Protected)           |
 
 ## Project Structure
 
